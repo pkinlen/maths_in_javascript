@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h2>Distance Calculator</h2>
+<br/>
+Determining the distance between points on the earth, using latitude and longitude.
+<br/><br/>
+
+<style>
+input[type=text] {
+  border: 3px solid #888888;
+  text-align:right;
+}
+
+input[type=text]:focus {
+  border: 3px solid #000000;
+}
+</style>
+
+
+
+<table><tbody>
+<tr> <td>  <b>Inputs</b></td>   </tr>
+<tr> <td>               </td>  <td align="right"> Latitude</td> <td align="right"> Longitude</td> </tr>
+
+<tr> <td>  Point A      </td>
+    <td align="right">
+        <input align="right" id="LatA" name="LatA"
+               onchange="LatLongRefresh()" type="text" value="40" style="width:8em" />
+    </td>
+
+    <td align="right">
+        <input align="right" id="LongA" name="LongA"
+               onchange="LatLongRefresh()" type="text" value="30" style="width:8em" />
+    </td>
+</tr>
+
+
+<tr> <td>  Point B      </td>
+    <td align="right">
+        <input align="right" id="LatB" name="LatB"
+               onchange="LatLongRefresh()" type="text" value="20" style="width:8em" />
+    </td>
+
+    <td align="right">
+        <input align="right" id="LongB" name="LongB"
+               onchange="LatLongRefresh()" type="text" value="10" style="width:8em" />
+    </td>
+</tr>
+
+<tr> <td> <br/> </td></tr>
+<tr> <td><b>Result</b></td> </tr>
+<tr> <td> Distance </td>  <td align="right" id="Distance"> </td>  <td> km </td> </tr>
+
+</tbody></table>
+<br/>
+If you change one of the inputs above and hit enter, then the result will be updated.<br>
+The latitude figures are degrees north of the equator. For degrees south, use a negative.<br>
+The longitude figures are the degrees west of the prime meridian. For degrees east use a negative number.<br>
+
+
+<script>
+
+  ///////////////////////////////////////////////////////////////////////
+  // Author: Philip Kinlen, Mar 2023
+  function LatLongRefresh() {
+
+    console.log("About to refresh the calc.");
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // Read
+    var latA   = LatLongText2Num(document.getElementById("LatA" ).value);
+    var longA  = LatLongText2Num(document.getElementById("LongA").value);
+    var latB   = LatLongText2Num(document.getElementById("LatB" ).value);
+    var longB  = LatLongText2Num(document.getElementById("LongB").value);
+
+    // Calc:
+    var distance = LatLongCalcDistance(latA, longA, latB, longB);
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // Write
+    document.getElementById("Distance").innerHTML = LatLongNum2StrWithCommas(distance , 2);
+
+    console.log("Completed the calc.");
+  }
+  /////////////////////////////////////////
+  // Result in km
+  function LatLongCalcDistance(latA, longA, latB, longB){
+
+    const earthRadius   = 20000.0 / Math.PI;  // Radius of the earth in KM. Assuming 10,000 km from equator to pole.
+    const degToRad      = Math.PI / 180.0;
+
+    var sinLatA  = Math.sin( latA  * degToRad);
+    var cosLatA  = Math.cos( latA  * degToRad);
+
+    var sinLongA = Math.sin( longA * degToRad);
+    var cosLongA = Math.cos( longA * degToRad);
+
+    var sinLatB  = Math.sin( latB  * degToRad);
+    var cosLatB  = Math.cos( latB  * degToRad);
+
+    var sinLongB = Math.sin( longB * degToRad);
+    var cosLongB = Math.cos( longB * degToRad);
+
+    // Unit sphere coords:
+    var xDiff = (cosLatA * cosLongA) - (cosLatB * cosLongB); // xA - xB
+
+    var yDiff = sinLatA - sinLatB;                           // yA - yB
+
+    var zDiff = (cosLatA * sinLongA) - (cosLatB * sinLongB); // zA - zB
+
+    // This is the straight-line distance between points on the unit sphere
+    var straightDist = Math.sqrt((xDiff * xDiff) + (yDiff * yDiff) + (zDiff * zDiff));
+
+    var distance     = earthRadius * 2.0 * Math.asin ( straightDist * 0.5 );
+
+    return distance; // km
+  }
+  /////////////////////////////////////////////////////////////////////////////
+  function LatLongText2Num(str){
+          console.log("trying to convert str " + str + " to a number.");
+          var ret = Number(str.replace(/\,/g,''));
+
+          return ret;
+  }
+  /////////////////////////////////////////////////////////////////////////////
+  function LatLongNum2StrWithCommas(x, decimals) {
+         return x.toFixed(decimals).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+  /////////////////////////////////////////////////////////////////////////////
+ LatLongRefresh();
+</script>
+
+</body>
+</html>
+
+
