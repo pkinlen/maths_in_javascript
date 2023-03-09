@@ -68,17 +68,17 @@ If you're interested in the mathematics used, then have look at
   function LatLongRefresh() {
 
     console.log("About to refresh the calc.");
-
+    
     ///////////////////////////////////////////////////////////////////////////////
     // Read
-    var latA   = LatLongText2Num(document.getElementById("LatA" ).value);
-    var longA  = LatLongText2Num(document.getElementById("LongA").value);
-    var latB   = LatLongText2Num(document.getElementById("LatB" ).value);
-    var longB  = LatLongText2Num(document.getElementById("LongB").value);
+    const latA   = LatLongText2Num(document.getElementById("LatA" ).value);
+    const longA  = LatLongText2Num(document.getElementById("LongA").value);
+    const latB   = LatLongText2Num(document.getElementById("LatB" ).value);
+    const longB  = LatLongText2Num(document.getElementById("LongB").value);
 
     // Calc:
-    var distance = LatLongCalcDistance(latA, longA, latB, longB);
-
+    const distance = LatLongCalcDistance(latA, longA, latB, longB);
+       
     ///////////////////////////////////////////////////////////////////////////////
     // Write
     document.getElementById("Distance").innerHTML = LatLongNum2StrWithCommas(distance , 2);
@@ -88,43 +88,43 @@ If you're interested in the mathematics used, then have look at
   /////////////////////////////////////////
   // Result in km
   function LatLongCalcDistance(latA, longA, latB, longB){
-
+    
     const earthRadius   = 20000.0 / Math.PI;  // Radius of the earth in KM. Assuming 10,000 km from equator to pole.
     const degToRad      = Math.PI / 180.0;
-
-    var sinLatA  = Math.sin( latA  * degToRad);
-    var cosLatA  = Math.cos( latA  * degToRad);
-
-    var sinLongA = Math.sin( longA * degToRad);
-    var cosLongA = Math.cos( longA * degToRad);
-
-    var sinLatB  = Math.sin( latB  * degToRad);
-    var cosLatB  = Math.cos( latB  * degToRad);
-
-    var sinLongB = Math.sin( longB * degToRad);
-    var cosLongB = Math.cos( longB * degToRad);
-
+    
+    const sinLatA  = Math.sin( latA  * degToRad);
+    const cosLatA  = Math.cos( latA  * degToRad);
+    
+    const sinLongA = Math.sin( longA * degToRad);
+    const cosLongA = Math.cos( longA * degToRad);
+    
+    const sinLatB  = Math.sin( latB  * degToRad);
+    const cosLatB  = Math.cos( latB  * degToRad);
+    
+    const sinLongB = Math.sin( longB * degToRad);
+    const cosLongB = Math.cos( longB * degToRad);
+    
     // Unit sphere coords:
-    var xDiff = (cosLatA * cosLongA) - (cosLatB * cosLongB); // xA - xB
-
-    var yDiff = sinLatA - sinLatB;                           // yA - yB
-
-    var zDiff = (cosLatA * sinLongA) - (cosLatB * sinLongB); // zA - zB
-
+    const xDiff = (cosLatA * cosLongA) - (cosLatB * cosLongB); // xA - xB
+    
+    const yDiff = sinLatA - sinLatB;                           // yA - yB
+    
+    const zDiff = (cosLatA * sinLongA) - (cosLatB * sinLongB); // zA - zB
+    
     // This is the straight-line distance between points on the unit sphere
-    var straightDist = Math.sqrt((xDiff * xDiff) + (yDiff * yDiff) + (zDiff * zDiff));
+    const straightDist = Math.sqrt((xDiff * xDiff) + (yDiff * yDiff) + (zDiff * zDiff));
 
-    var distance     = earthRadius * 2.0 * Math.asin ( straightDist * 0.5 );
-
-    return distance; // km
+    const distance     = earthRadius * 2.0 * Math.asin ( straightDist * 0.5 ); 
+    
+    return distance; // km     
   }
   /////////////////////////////////////////////////////////////////////////////
   function LatLongText2Num(str){
           console.log("trying to convert str " + str + " to a number.");
-          var ret = Number(str.replace(/\,/g,''));
-
-          return ret;
-  }
+          const ret = Number(str.replace(/\,/g,''));
+        
+          return ret;        
+  } 
   /////////////////////////////////////////////////////////////////////////////
   function LatLongNum2StrWithCommas(x, decimals) {
          return x.toFixed(decimals).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
