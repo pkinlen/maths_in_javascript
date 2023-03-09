@@ -1,4 +1,4 @@
-# Doing Calculations using javascript.
+# Doing Calculations Using Javascript.
 
 In this repository we show how some mathematical calculations can be done using javascript, often embedded in an HTML file.
 For example we have a distance calculator that takes as input the latitude and longitude for two points and works out the distance between them.
